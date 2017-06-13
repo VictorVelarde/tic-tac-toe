@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import './Board.css';
 import Square from './Square';
 
 class Board extends Component {
@@ -11,33 +11,42 @@ class Board extends Component {
         null, null, null,
         null, null, null,
         null, null, null
-      ]
+      ],
+      next: 'X'
     };
   }
 
   render() {
-    let status = 'Next player is: X';
-
-    let elements = [];
-    for (let i = 1; i < 10; i++) {
-      elements.push(this.renderSquare(i));
-      let endOfRow = (i % 3 === 0);
-      endOfRow && elements.push(<br/>);
-    }
-    console.log(elements);
 
     return (
       <div>
-        <h2>{status}</h2>
-        {elements}
+        <div className="status">next player is {this.state.next}</div>
+
+        <div className="board-row">
+          {this.renderSquare(0)}
+          {this.renderSquare(1)}
+          {this.renderSquare(2)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(3)}
+          {this.renderSquare(4)}
+          {this.renderSquare(5)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(6)}
+          {this.renderSquare(7)}
+          {this.renderSquare(8)}
+        </div>
       </div>
     ); //squares;
   }
 
   handleClick(i){
     let s = this.state.squares.slice();
-    s[i] = 'X';
-    this.setState({squares: s});
+    let current = this.state.next;
+    s[i] = current;
+    let n = (current === 'X') ? 'O' : 'X';
+    this.setState({squares: s, next: n});
   }
 
   renderSquare(i) {
