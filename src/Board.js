@@ -2,23 +2,24 @@ import React, {Component} from 'react';
 
 import Square from './Square';
 
-class Board extends Component{
+class Board extends Component {
 
-  constructor(){
+  constructor() {
     super();
     this.state = {
       squares: [
         null, null, null,
         null, null, null,
         null, null, null
-      ]};
+      ]
+    };
   }
 
-  render(){
+  render() {
     let status = 'Next player is: X';
 
     let elements = [];
-    for(let i=1; i<10; i++){
+    for (let i = 1; i < 10; i++) {
       elements.push(this.renderSquare(i));
       let endOfRow = (i % 3 === 0);
       endOfRow && elements.push(<br/>);
@@ -33,10 +34,18 @@ class Board extends Component{
     ); //squares;
   }
 
-  renderSquare(i){
+  handleClick(i){
+    let s = this.state.squares.slice();
+    s[i] = 'X';
+    this.setState({squares: s});
+  }
+
+  renderSquare(i) {
     return (
-      <Square key={i} value={this.state.squares[i]} />
-    );
+      <Square
+        key={i}
+        value={this.state.squares[i]}
+        onClick={() => this.handleClick(i)}/>);
   }
 }
 
