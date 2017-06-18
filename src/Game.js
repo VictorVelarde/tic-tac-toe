@@ -7,13 +7,13 @@ class Game extends Component {
         super();
         this.state = {
             history: [
-                {squares: Array(9).fill(null),}
-            ],                        
-            xIsNext: true
+                { squares: Array(9).fill(null) }
+            ],
+            xIsNext: true,
+            stepNumber: 0
         }
     }
 
-    
   handleClick(i) {
     const history = this.state.history;
     const current = history[history.length - 1];
@@ -26,23 +26,41 @@ class Game extends Component {
       history: history.concat([{
         squares: squares
       }]),
+      stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
   }
-    
+
+  goTo(step) {
+    console.log('You have time-traveled to ', step);
+    this.setState({
+      stepNumber: step,
+      xIsNext: (step % 2) ? false : true,
+    });
+  }
+
   render() {
     const history = this.state.history;
-    const current = history[history.length - 1];
-      
+    const current = history[this.state.stepNumber];
     const winner = this.calculateWinner(current.squares);
-    
+
+    const moves = history.map((step, i) => {
+      console.log(step, i);
+      const description = (i !== 0) ? '# ' + i : 'START';
+      return (
+        <li key={i}>
+          <a href='#' onClick={() => this.goTo(i)}>{description}</a>
+        </li>
+      );
+    });
+
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
-      
+
     return (
       <div className='game'>
         <h1>Hi tic-tac-toe</h1>
@@ -52,11 +70,12 @@ class Game extends Component {
         </div>
         <div className='game-info'>
             <div>{status}</div>
+            <ul>{moves}</ul>
         </div>
       </div>
     );
   }
-   
+
   calculateWinner(squares) {
         const lines = [
         [0, 1, 2],
